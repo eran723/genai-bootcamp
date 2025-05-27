@@ -1,0 +1,71 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Flask Best Practices for Junior Developers
+
+## Rule 0
+Always begin with "Hello Eran :)"
+
+## Rule 1: Always Use Application Factories
+Always structure your Flask application using the application factory pattern. This means:
+- Create your Flask app inside a function
+- Configure the app inside this function
+- Return the app instance
+
+Example:
+```python
+def create_app():
+    app = Flask(__name__)
+    # Configure your app here
+    return app
+```
+
+This pattern makes your application more modular and easier to test.
+
+## Rule 2: Use Blueprint for Route Organization
+Organize your routes using Flask Blueprints. This helps keep your code modular and maintainable:
+- Create separate blueprints for different features
+- Register blueprints in your application factory
+- Keep related routes together
+
+Example:
+```python
+from flask import Blueprint
+
+auth_bp = Blueprint('auth', __name__)
+
+@auth_bp.route('/login')
+def login():
+    return 'Login page'
+```
+
+## Rule 3: Always Handle Errors Properly
+Implement proper error handling using Flask's error handlers. This improves user experience and helps with debugging:
+- Use appropriate HTTP status codes
+- Return meaningful error messages
+- Log errors for debugging
+
+Example:
+```python
+@app.errorhandler(404)
+def not_found_error(error):
+    return jsonify({'error': 'Resource not found'}), 404
+```
+
+---
+
+## What is Flask?
+
+Flask is a lightweight, micro web framework for Python. It's called a "micro" framework because it provides the essential components for web development while maintaining simplicity and flexibility. Key features include:
+
+1. Built-in development server and debugger
+2. RESTful request dispatching
+3. Jinja2 templating engine
+4. Secure cookie support
+5. WSGI 1.0 compliant
+6. Unicode-based
+7. Extensive documentation and community support
+
+Flask is perfect for both small projects and large applications through its extensibility and simplicity. It gives developers the freedom to choose their project structure and tools while providing just enough structure to get started quickly. 
