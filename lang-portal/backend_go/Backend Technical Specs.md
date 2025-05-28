@@ -10,10 +10,30 @@ A language learning school wants to build a prototype of learning portal which w
 ## Technical Requirements
 - The backend will be built using Go
 - The database will be SQLite3
-- The API will be built using GIn
+- The API will be built using Gin
+- Mage is a task runner for Go.
 - The API will always return JSON
 - There will be no authentication or authorization
 - Everything would be treated as a single user.
+
+## Directory Structure
+'''text
+backend_go/
+│   ├── cmd/                    # Application entrypoints
+│   │   └── server/            # Main server application
+│   ├── internal/              # Private application code
+│   │   ├── api/              # API handlers and routes
+│   │   ├── models/           # Database models
+│   │   ├── database/         # Database connection and queries
+│   │   └── service/          # Business logic
+│   ├── db/                  # Database related files
+│   │   ├── migrations/      # SQL migration files
+│   │   └── seeds/          # Seed data files
+│   ├── magefiles/           # Mage task definitions
+│   ├── go.mod              # Go module file
+│   ├── go.sum              # Go dependencies checksum
+│   └── words.db
+'''
 
 ## Database Schema
 
@@ -381,7 +401,7 @@ POST /api/full_reset
 }
 ```
 
-## Mage Tasks
+## Tasks
 Mage is a task runner for 'Go'.
 Lets list out possible tasks we need for our lang portal.
 
@@ -405,6 +425,3 @@ This task will import json files and transform them into target data for our dat
 All seed files live in the 'seeds' folder.
 
 In our task we should have a DSL to specific each seed file and its expected group word name.
-
-```json
-```

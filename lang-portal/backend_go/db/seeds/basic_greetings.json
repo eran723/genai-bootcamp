@@ -1,0 +1,48 @@
+{
+  "group": {
+    "name": "Basic Greetings",
+    "description": "Common Japanese greetings for everyday use"
+  },
+  "words": [
+    {
+      "japanese": "こんにちは",
+      "romaji": "konnichiwa",
+      "english": "hello",
+      "parts": {
+        "type": "greeting",
+        "formality": "neutral",
+        "usage": "daytime greeting"
+      }
+    },
+    {
+      "japanese": "おはようございます",
+      "romaji": "ohayou gozaimasu",
+      "english": "good morning",
+      "parts": {
+        "type": "greeting",
+        "formality": "polite",
+        "usage": "morning greeting"
+      }
+    },
+    {
+      "japanese": "こんばんは",
+      "romaji": "konbanwa",
+      "english": "good evening",
+      "parts": {
+        "type": "greeting",
+        "formality": "neutral",
+        "usage": "evening greeting"
+      }
+    },
+    {
+      "japanese": "さようなら",
+      "romaji": "sayounara",
+      "english": "goodbye",
+      "parts": {
+        "type": "farewell",
+        "formality": "neutral",
+        "usage": "formal goodbye"
+      }
+    }
+  ]
+} 
