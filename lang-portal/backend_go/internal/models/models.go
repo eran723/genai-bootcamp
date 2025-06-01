@@ -53,3 +53,23 @@ type WordReviewItem struct {
 	IsCorrect  bool      `json:"is_correct"`
 	ReviewedAt time.Time `json:"reviewed_at"`
 }
+
+// Pagination represents pagination parameters and metadata
+type Pagination struct {
+	CurrentPage  int   `json:"current_page"`
+	TotalPages   int   `json:"total_pages"`
+	TotalItems   int64 `json:"total_items"`
+	ItemsPerPage int   `json:"items_per_page"`
+}
+
+// PaginatedResponse represents a paginated API response
+type PaginatedResponse struct {
+	Items      interface{} `json:"items"`
+	Pagination Pagination  `json:"pagination"`
+}
+
+// ListResult represents a paginated result from services
+type ListResult struct {
+	Items      interface{}
+	TotalItems int64
+}

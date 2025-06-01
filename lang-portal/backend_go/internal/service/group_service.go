@@ -36,7 +36,15 @@ func (s *GroupService) GetGroup(id int64) (*models.Group, error) {
 }
 
 // ListGroups retrieves a paginated list of groups
-func (s *GroupService) ListGroups(offset, limit int) ([]models.Group, error) {
+func (s *GroupService) ListGroups(offset, limit int) (*models.ListResult, error) {
+	// Get total count first
+	var totalItems int64
+	err := s.db.QueryRow("SELECT COUNT(*) FROM groups").Scan(&totalItems)
+	if err != nil {
+		return nil, err
+	}
+
+	// Get paginated groups
 	rows, err := s.db.Query(
 		"SELECT id, name, description FROM groups LIMIT ? OFFSET ?",
 		limit, offset,
@@ -55,7 +63,10 @@ func (s *GroupService) ListGroups(offset, limit int) ([]models.Group, error) {
 		groups = append(groups, group)
 	}
 
-	return groups, nil
+	return &models.ListResult{
+		Items:      groups,
+		TotalItems: totalItems,
+	}, nil
 }
 
 // CreateGroup creates a new group

@@ -46,7 +46,15 @@ func (s *StudySessionService) GetSession(id int64) (*models.StudySession, error)
 }
 
 // ListSessions retrieves a paginated list of study sessions
-func (s *StudySessionService) ListSessions(offset, limit int) ([]models.StudySession, error) {
+func (s *StudySessionService) ListSessions(offset, limit int) (*models.ListResult, error) {
+	// Get total count first
+	var totalItems int64
+	err := s.db.QueryRow("SELECT COUNT(*) FROM study_sessions").Scan(&totalItems)
+	if err != nil {
+		return nil, err
+	}
+
+	// Get paginated sessions
 	rows, err := s.db.Query(`
 		SELECT id, start_time, end_time, score, status, study_activity_id
 		FROM study_sessions 
@@ -75,7 +83,10 @@ func (s *StudySessionService) ListSessions(offset, limit int) ([]models.StudySes
 		sessions = append(sessions, session)
 	}
 
-	return sessions, nil
+	return &models.ListResult{
+		Items:      sessions,
+		TotalItems: totalItems,
+	}, nil
 }
 
 // CreateSession creates a new study session

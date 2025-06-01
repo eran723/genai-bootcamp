@@ -26,8 +26,9 @@ backend/
 │   ├── models/           # Database models
 │   ├── database/         # Database connection and queries
 │   └── service/          # Business logic
-├── migrations/           # SQL migration files
-├── seeds/               # Seed data files
+├── db/ 
+│   ├── migrations/           # SQL migration files
+│   ├──  seeds/               # Seed data files
 ├── magefiles/           # Mage task definitions
 ├── go.mod              # Go module file
 └── go.sum              # Go dependencies checksum

@@ -29,22 +29,38 @@ func (h *GroupHandler) RegisterRoutes(router *gin.Engine) {
 		groups.PUT("/:id", h.UpdateGroup)
 		groups.DELETE("/:id", h.DeleteGroup)
 		groups.GET("/:id/words", h.GetGroupWords)
-		groups.GET("/:id/sessions", h.GetGroupSessions)
+		groups.GET("/:id/study-sessions", h.GetGroupStudySessions)
 	}
 }
 
 // ListGroups handles GET /api/groups
 func (h *GroupHandler) ListGroups(c *gin.Context) {
-	offset, _ := strconv.Atoi(c.DefaultQuery("offset", "0"))
-	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	// Get pagination parameters with default 100 items per page as per spec
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit := 100 // Fixed as per spec
+	offset := (page - 1) * limit
 
-	groups, err := h.groupService.ListGroups(offset, limit)
+	// Get groups from service
+	result, err := h.groupService.ListGroups(offset, limit)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, groups)
+	// Calculate pagination metadata
+	totalPages := int((result.TotalItems + int64(limit) - 1) / int64(limit))
+
+	response := models.PaginatedResponse{
+		Items: result.Items,
+		Pagination: models.Pagination{
+			CurrentPage:  page,
+			TotalPages:   totalPages,
+			TotalItems:   result.TotalItems,
+			ItemsPerPage: limit,
+		},
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 // GetGroup handles GET /api/groups/:id
@@ -62,6 +78,98 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, group)
+}
+
+// GetGroupWords handles GET /api/groups/:id/words
+func (h *GroupHandler) GetGroupWords(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid group ID"})
+		return
+	}
+
+	// Get pagination parameters with default 100 items per page as per spec
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit := 100 // Fixed as per spec
+	offset := (page - 1) * limit
+
+	words, err := h.groupService.GetGroupWords(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Calculate total pages based on total words
+	totalItems := int64(len(words))
+	totalPages := int((totalItems + int64(limit) - 1) / int64(limit))
+
+	// Paginate the results
+	start := offset
+	end := offset + limit
+	if start > len(words) {
+		start = len(words)
+	}
+	if end > len(words) {
+		end = len(words)
+	}
+
+	response := models.PaginatedResponse{
+		Items: words[start:end],
+		Pagination: models.Pagination{
+			CurrentPage:  page,
+			TotalPages:   totalPages,
+			TotalItems:   totalItems,
+			ItemsPerPage: limit,
+		},
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+// GetGroupStudySessions handles GET /api/groups/:id/study-sessions
+func (h *GroupHandler) GetGroupStudySessions(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid group ID"})
+		return
+	}
+
+	// Get pagination parameters with default 100 items per page as per spec
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit := 100 // Fixed as per spec
+	offset := (page - 1) * limit
+
+	sessions, err := h.groupService.GetGroupStudySessions(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Calculate total pages based on total sessions
+	totalItems := int64(len(sessions))
+	totalPages := int((totalItems + int64(limit) - 1) / int64(limit))
+
+	// Paginate the results
+	start := offset
+	end := offset + limit
+	if start > len(sessions) {
+		start = len(sessions)
+	}
+	if end > len(sessions) {
+		end = len(sessions)
+	}
+
+	response := models.PaginatedResponse{
+		Items: sessions[start:end],
+		Pagination: models.Pagination{
+			CurrentPage:  page,
+			TotalPages:   totalPages,
+			TotalItems:   totalItems,
+			ItemsPerPage: limit,
+		},
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 // CreateGroup handles POST /api/groups
@@ -117,38 +225,4 @@ func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 	}
 
 	c.Status(http.StatusNoContent)
-}
-
-// GetGroupWords handles GET /api/groups/:id/words
-func (h *GroupHandler) GetGroupWords(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid group ID"})
-		return
-	}
-
-	words, err := h.groupService.GetGroupWords(id)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, words)
-}
-
-// GetGroupSessions handles GET /api/groups/:id/sessions
-func (h *GroupHandler) GetGroupSessions(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid group ID"})
-		return
-	}
-
-	sessions, err := h.groupService.GetGroupStudySessions(id)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, sessions)
 }

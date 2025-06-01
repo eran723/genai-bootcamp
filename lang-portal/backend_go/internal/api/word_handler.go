@@ -33,27 +33,32 @@ func (h *WordHandler) RegisterRoutes(r *gin.Engine) {
 
 // ListWords handles GET /api/words
 func (h *WordHandler) ListWords(c *gin.Context) {
-	// Get pagination parameters
+	// Get pagination parameters with default 100 items per page as per spec
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
-	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "100"))
-
-	// Calculate offset
+	limit := 100 // Fixed as per spec
 	offset := (page - 1) * limit
 
 	// Get words from service
-	words, err := h.wordService.ListWords(offset, limit)
+	result, err := h.wordService.ListWords(offset, limit)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"items": words,
-		"pagination": gin.H{
-			"current_page":   page,
-			"items_per_page": limit,
+	// Calculate pagination metadata
+	totalPages := int((result.TotalItems + int64(limit) - 1) / int64(limit))
+
+	response := models.PaginatedResponse{
+		Items: result.Items,
+		Pagination: models.Pagination{
+			CurrentPage:  page,
+			TotalPages:   totalPages,
+			TotalItems:   result.TotalItems,
+			ItemsPerPage: limit,
 		},
-	})
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 // GetWord handles GET /api/words/:id

@@ -1,0 +1,152 @@
+# Front End Prompt
+This file should be used as an initial prompt.
+(Note: May be overlapping with 'Frontend Technical Specs.md'.)
+
+# Project Description
+## Project Brief
+We are building a japanese language learning web-app which serves the following porpuses:
+- A portal to launch study activities.
+- to store, group and explore japanese vocabulary and grammar.
+- to review study progress
+
+The web-app is intended for desktop only so we don't have to be concerend with mobile layouts.
+
+# Technical requirements
+## Basics
+- React.js as the frontend library
+- Tailwind CSS as the CSS network.
+- Vite.js as the local development server
+- Typescript for the programming language
+- ShadCN for components
+
+## Code
+Create the front end project
+Include Tests for code testings and performance.
+
+## Frontend Routes
+This is a list of routs for our web-app we are building.
+Each of these routes are a page and we'll describe them in more detail under the pages heading.
+
+/dashboard
+/study_activities
+/study_activities/:id
+/words
+/words/:id
+/groups
+/groups/:id
+/study_sessions
+/settings
+
+The default route should forward to /dashboard/
+
+## Global Components
+### Navigation
+
+There will be a horizontal navigation bar with the following links.
+- Dashboard
+- Study Activities
+- Words
+- Word Groups
+- Sessions
+- Settings
+
+#### Bread crumbs 
+Beneath the navigation there will be breadcrumbs so users can easily see where they are.
+Examples:
+- Dashboard
+- Study Activities > Adventure MUD
+- Study Activities > Typing Tutor
+- Words > <japanese_word>
+- Word Groups
+
+### Pages
+#### Dashboard
+This page provides a summary of the student's progression.
+- Last Session
+
+#### Study Activities Index
+The route for this page /study_activities
+This is a grade for cards whichrepresent an activity.
+
+A card has a 
+- thumbnail
+- title
+- "Launch" button
+- "View" button
+ 
+The Launch button will open a new adress in a new tab.
+Study activities are their own apps, but in order for them to launch they need to be provided a group_id
+
+eg: localhost:8081?group_id=4
+
+This page requires no pagination because it is unlikely to be more than 20 possible study activities.
+
+The View button will go to the Student Activities Show Page.
+
+#### Study Activities Show
+The rout fot his page: /study_activities/:id
+
+This page will have information section which will contain:
+- thumbnail
+- title
+- description
+- launch button
+
+There will be a list of sessions for this study activity
+- a session item will contain:
+    - Group Name: So you know what group name was used for the sessions. This will be a link to the "Group SHow Page"
+    - Start Time: When the session was reated in DD-MM-YY format (24 hours)
+    - End Time: When the last word_review_item was created.
+    - Number of Review Items : The number of review Items
+
+#### Words Index
+The route for this page: /words
+
+This is a table of words with the following cells:
+- Japanese:
+    - This will also contain a small button to play the sound of the word
+    - The japanese word will be a link to the "Words Show Page"
+- Romaji.
+- English
+- Correct: Number of correct word review items.
+- Wrong: Number of wrong word review items
+
+There should only be 50 words displayed at a time.
+There needs to be pagination:
+- Previous button: grey out if you cannot go further back
+- Page 1 of 3: With the current page bolded. With the number of pages correct.
+- Next button: greyed out if you cannot go any further forward.
+
+All tables headings should be sortable, if you click it it will toggle between Ascending and Descending.
+An ascii arrow should indicate direction and the column being sorted with ascending pointing down and descending pointing up.
+
+#### Words Show
+The route for this page: /word/:id
+
+#### Word Groups Index
+The route for this page: /groups
+
+This page has a table of word groups with the following cells:
+- Group Name: the name of the group
+    - This will be a link to Word Groups Show
+- Words: The number of words associated with this group
+
+#### Groups Show
+The route for this page: /groups/:id
+
+This has the same componens as Words Index but it's scoped to only show worfs that are associated with this group.
+
+#### Sessions Inex
+The route for this page: /study_sessions
+
+This page contains a list of list of sessions similar to Study Activities Show
+THis page contains the same sorting and pagination logic as the Words INdex Page
+
+#### Settings
+The route for this page: /settings
+This page contains
+- Reset History Button: THis button resets the studdy sessions history.
+- Reset ALL Button: THis button allows us to reset the entire database.
+- Dark Mode Toggle: this is a toggle that changes from light to dark theme.
+
+

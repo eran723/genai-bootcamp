@@ -44,7 +44,15 @@ func (s *WordService) GetWord(id int64) (*models.Word, error) {
 }
 
 // ListWords retrieves a paginated list of words
-func (s *WordService) ListWords(offset, limit int) ([]models.Word, error) {
+func (s *WordService) ListWords(offset, limit int) (*models.ListResult, error) {
+	// Get total count first
+	var totalItems int64
+	err := s.db.QueryRow("SELECT COUNT(*) FROM words").Scan(&totalItems)
+	if err != nil {
+		return nil, err
+	}
+
+	// Get paginated words
 	rows, err := s.db.Query(
 		"SELECT id, japanese, romaji, english, parts FROM words LIMIT ? OFFSET ?",
 		limit, offset,
@@ -70,7 +78,10 @@ func (s *WordService) ListWords(offset, limit int) ([]models.Word, error) {
 		words = append(words, word)
 	}
 
-	return words, nil
+	return &models.ListResult{
+		Items:      words,
+		TotalItems: totalItems,
+	}, nil
 }
 
 // CreateWord creates a new word
