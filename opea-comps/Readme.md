@@ -20,11 +20,14 @@ So we proceed with the locall ollama container.
 We will use dockers to run everything.
 
 ## Running Ollama Third-Party Service
+### Download (Pull) a model
+curl http://localhost:8008/api/pull -d '{
+  "model": "llama3.2:1b"
+}'
+
 ### # Choosing a modules
 You can get the model_id that ollama will launch from the [Ollama Library] https://ollama.com/library
 e.g https://ollama.com/library/llama3.2
-
-
 
 #### Linux
 Get your IP address
@@ -43,3 +46,20 @@ export LLM_ENDPOINT_PORT=8008
 export LLM_MODEL_ID="llama3.2:1b"
 docker compose up
 '''
+
+### API access
+https://github.com/ollama/ollama/blob/main/docs/api.md
+
+https://github.com/opea-project/GenAIComps/blob/main/comps/third_parties/ollama/README.md
+
+Send an application/json request to the API endpoint of Ollama to interact.
+
+Once the Ollama server is running we can make API calls to the ollama API
+
+#### Generate request
+curl http://localhost:8008/api/generate -d '{
+  "model": "llama3.2:1b",
+  "prompt":"Why is the sky blue?"
+}'
+
+Note that you should explicitly mention 'ports:' in the container description. having localport <-> internal docker port.
