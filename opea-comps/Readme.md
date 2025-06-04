@@ -24,6 +24,9 @@ We will use dockers to run everything.
 curl http://localhost:8008/api/pull -d '{
   "model": "llama3.2:1b"
 }'
+curl http://localhost:8008/api/pull -d '{
+  "model": "tinyllama:1.1b"
+}'
 
 ### # Choosing a modules
 You can get the model_id that ollama will launch from the [Ollama Library] https://ollama.com/library
@@ -40,6 +43,7 @@ Or try it this way : '$(hostname -I | awk '{print $1}')'
 ##### Configuration Run
 (host found on eth0, after running ifconfig)
 '''sh
+cd opea-comps/
 export NO_PROXY=localhost
 export HOST_IP=$(hostname -I | awk '{print $1}')
 export LLM_ENDPOINT_PORT=8008 
@@ -57,9 +61,18 @@ Send an application/json request to the API endpoint of Ollama to interact.
 Once the Ollama server is running we can make API calls to the ollama API
 
 #### Generate request
+##### llama3.2:1b
 curl http://localhost:8008/api/generate -d '{
   "model": "llama3.2:1b",
   "prompt":"Why is the sky blue?"
 }'
+##### tinyllama:1.1b
+curl http://localhost:8008/api/generate -d '{
+  "model": "tinyllama:1.1b",
+  "prompt":"Hello! Which model are you?"
+}'
 
 Note that you should explicitly mention 'ports:' in the container description. having localport <-> internal docker port.
+
+## OPEA Examples
+Examples on running OPEA Micro/Mega Services.

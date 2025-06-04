@@ -8,6 +8,14 @@
 # Test binary, built with `go test -c`
 *.test
 
+# Python packages and cache
+*.pyc
+*.pth
+
+# Ignore .venv
+.venv/
+
+
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 

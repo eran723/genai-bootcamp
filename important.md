@@ -56,3 +56,23 @@ Document everything. It is very good for structuring, inputing, and tracking pro
 
 ## Coding from scratch
 - There will always be a payed / better tool to autocomplete your writings and have clever suggestions, but the true power of this tool is having a clear plan in mind, knowing the possibilities, and simply dictating the road ahead.
+
+# Week 1: Developement from scratch
+Alot was covered this week.
+We got the API backend going, via the technical analysis.
+Same with the frontend, and lovable.
+-> Remember that creating the basics doesn't cut it on the long run, you have to be able to engineer the desgin to be able to hold features and updates!! And then successfully apply those features inside, can be a little different when using AI generated templates.
+
+We covered a realy nice and strong basis for running Ollama-server.
+Using docker to connnect to the ollama server, composing, then pulling and connecting with the lamma API (in the terminal).
+This is an important note, after having a back and front you want an agent or at least a machine to communicate with and run locally, or at least to connect localy.
+We had alot of time covered figuring out how to run the server, then pulling the ollama service and model to it, and only then communicating with it.
+We had a tough go at creating a megaservice and an envalope for this ollama server, it is important to get the data-streaming-I/O objects right at everyturn, but we got the components working.
+
+Towards the end of the week of classes, an additional implementaion of language-dictionary was (will) added to the library. This is an important lesson of recapping the tools that were covered this week, connecting with an agent, and adding major features to your design.
+
+%% TODO: Add this language dictionary
+%% TODO: (Optional) Cover the backend-tests
+%% TODO: (Optional) Cover the handle_response function
+
+%% TODO: **IMPORTANT** (SOON) Design an agent for internal use.
